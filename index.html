@@ -1,1 +1,105 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sign Out Song</title><style>*{margin:0;padding:0;box-sizing:border-box}body{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a3a5c;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#e0e0e0;overflow:hidden}.container{text-align:center;max-width:480px;width:90%;padding:48px 32px}h1{font-size:28px;font-weight:700;color:#ffffff;line-height:1.3;margin-bottom:12px}.subtitle{font-size:15px;color:#a0aab4;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:48px}.play-btn{width:100px;height:100px;border-radius:50%;background:#4a5568;border:3px solid #d4a017;box-shadow:0 0 20px rgba(212,160,23,0.25);cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;transition:all .2s ease}.play-btn:hover{background:#5a6578;box-shadow:0 0 30px rgba(212,160,23,0.45);transform:scale(1.05)}.play-btn:active{transform:scale(.96)}.play-btn svg{width:40px;height:40px;fill:#ffffff;margin-left:5px}.play-btn.playing svg{margin-left:0}.progress-wrap{width:100%;height:4px;background:#2d4a66;border-radius:2px;margin-bottom:10px;cursor:pointer;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#d4a017,#f0c040);width:0%;border-radius:2px;transition:width .1s linear}.time{font-size:11px;color:#6b7f8e;font-family:'Courier New',monospace;display:flex;justify-content:space-between}</style></head><body><div class="container"><h1>Are you in a good place<br>for sign out?</h1><div class="subtitle">Sign Out Song</div><button class="play-btn" id="playBtn" onclick="togglePlay()"><svg id="playIcon" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></button><div class="progress-wrap" onclick="seek(event)"><div class="progress-bar" id="progressBar"></div></div><div class="time"><span id="currentTime">0:00</span><span id="duration">0:00</span></div></div><audio id="audio" src="sign-out-song.mp3" preload="auto"></audio><script>const audio=document.getElementById('audio'),playBtn=document.getElementById('playBtn'),playIcon=document.getElementById('playIcon'),progressBar=document.getElementById('progressBar'),currentTimeEl=document.getElementById('currentTime'),durationEl=document.getElementById('duration');const playSVG='<polygon points="6,3 20,12 6,21"/>',pauseSVG='<rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/>';function fmt(s){if(isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}function togglePlay(){if(audio.paused){audio.play();playIcon.innerHTML=pauseSVG;playBtn.classList.add('playing')}else{audio.pause();playIcon.innerHTML=playSVG;playBtn.classList.remove('playing')}}audio.addEventListener('timeupdate',()=>{progressBar.style.width=(audio.currentTime/audio.duration)*100+'%';currentTimeEl.textContent=fmt(audio.currentTime)});audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=fmt(audio.duration)});audio.addEventListener('ended',()=>{playIcon.innerHTML=playSVG;playBtn.classList.remove('playing');progressBar.style.width='0%'});function seek(e){const r=e.currentTarget.getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Out Tool</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;display:flex;flex-direction:column;background:#1a3a5c;font-family:Tahoma,'MS Sans Serif',Geneva,sans-serif;color:#000;font-size:11px;overflow:hidden}
+/* Title bar */
+.titlebar{background:linear-gradient(180deg,#0058a8,#003d7a);color:#fff;padding:3px 6px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:6px;border-bottom:1px solid #002a55}
+.titlebar-icon{width:14px;height:14px;background:#c0c0c0;border:1px solid #808080;display:inline-block;font-size:8px;text-align:center;line-height:14px;color:#000}
+.titlebar-btns{margin-left:auto;display:flex;gap:2px}
+.titlebar-btns span{width:16px;height:14px;background:#c0c0c0;border:1px outset #dfdfdf;display:inline-block;text-align:center;line-height:12px;font-size:9px;cursor:default}
+/* Toolbar */
+.toolbar{background:#c0c0c0;border-bottom:1px solid #808080;padding:2px 4px;display:flex;gap:2px}
+.toolbar-btn{background:#c0c0c0;border:1px outset #dfdfdf;padding:1px 8px;font-size:10px;font-family:Tahoma,sans-serif;cursor:default;color:#000}
+.toolbar-btn:active{border-style:inset}
+/* Main area */
+.main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+/* Panel */
+.panel{background:#1e4470;border:2px inset #0d2847;width:100%;max-width:520px;box-shadow:inset 0 0 0 1px #2a5a8a}
+/* Alert banner */
+.alert-banner{background:linear-gradient(180deg,#e8b800,#d4a017);color:#000;padding:6px 10px;font-size:13px;font-weight:700;text-align:center;border-bottom:1px solid #b8960f;text-shadow:0 1px 0 rgba(255,255,255,0.3)}
+/* Panel body */
+.panel-body{padding:20px 24px}
+/* Label */
+.field-label{color:#8899aa;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;text-align:center}
+/* Play button area */
+.controls{display:flex;flex-direction:column;align-items:center;gap:12px}
+.play-btn{width:60px;height:32px;background:#c0c0c0;border:2px outset #dfdfdf;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:Tahoma,sans-serif;font-size:10px;font-weight:700;color:#000;gap:4px}
+.play-btn:active,.play-btn.playing{border-style:inset;background:#b0b0b0}
+.play-btn svg{width:12px;height:12px;fill:#000}
+/* Progress */
+.progress-outer{width:100%;background:#c0c0c0;border:2px inset #808080;padding:1px}
+.progress-inner{height:12px;background:#1a3a5c;position:relative}
+.progress-fill{height:100%;background:linear-gradient(180deg,#e8b800,#c89e00);width:0%;transition:width .1s linear}
+/* Time */
+.time-row{width:100%;display:flex;justify-content:space-between;color:#8899aa;font-family:'Courier New',monospace;font-size:10px;margin-top:4px}
+/* Status bar */
+.statusbar{background:#c0c0c0;border-top:1px solid #fff;padding:2px 6px;font-size:10px;color:#000;display:flex}
+.statusbar-cell{border:1px inset #c0c0c0;padding:1px 6px;flex:1}
+.statusbar-cell.right{flex:none;width:140px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+<span class="titlebar-icon">+</span>
+Sign Out Tool - [CPRS]
+<div class="titlebar-btns"><span>_</span><span>□</span><span>×</span></div>
+</div>
+
+<div class="toolbar">
+<span class="toolbar-btn">File</span>
+<span class="toolbar-btn">Edit</span>
+<span class="toolbar-btn">View</span>
+<span class="toolbar-btn">Tools</span>
+<span class="toolbar-btn">Help</span>
+</div>
+
+<div class="main">
+<div class="panel">
+<div class="alert-banner">⚠ Are you in a good place for sign out?</div>
+<div class="panel-body">
+<div class="field-label">Sign Out Song</div>
+<div class="controls">
+<button class="play-btn" id="playBtn" onclick="togglePlay()">
+<svg id="playIcon" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+<span id="btnLabel">Play</span>
+</button>
+<div class="progress-outer">
+<div class="progress-inner">
+<div class="progress-fill" id="progressBar"></div>
+</div>
+</div>
+<div class="time-row">
+<span id="currentTime">0:00</span>
+<span id="duration">0:00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="statusbar">
+<span class="statusbar-cell" id="status">Ready</span>
+<span class="statusbar-cell right" id="clock"></span>
+</div>
+
+<audio id="audio" src="sign-out-song.mp3" preload="auto"></audio>
+
+<script>
+const audio=document.getElementById('audio'),playBtn=document.getElementById('playBtn'),playIcon=document.getElementById('playIcon'),btnLabel=document.getElementById('btnLabel'),progressBar=document.getElementById('progressBar'),currentTimeEl=document.getElementById('currentTime'),durationEl=document.getElementById('duration'),statusEl=document.getElementById('status'),clockEl=document.getElementById('clock');
+const playSVG='<polygon points="6,3 20,12 6,21"/>',pauseSVG='<rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/>';
+function fmt(s){if(isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}
+function togglePlay(){if(audio.paused){audio.play();playIcon.innerHTML=pauseSVG;btnLabel.textContent='Pause';playBtn.classList.add('playing');statusEl.textContent='Playing: sign-out-song.mp3'}else{audio.pause();playIcon.innerHTML=playSVG;btnLabel.textContent='Play';playBtn.classList.remove('playing');statusEl.textContent='Paused'}}
+audio.addEventListener('timeupdate',()=>{progressBar.style.width=(audio.currentTime/audio.duration)*100+'%';currentTimeEl.textContent=fmt(audio.currentTime)});
+audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=fmt(audio.duration)});
+audio.addEventListener('ended',()=>{playIcon.innerHTML=playSVG;btnLabel.textContent='Play';playBtn.classList.remove('playing');progressBar.style.width='0%';statusEl.textContent='Ready'});
+function updateClock(){const d=new Date();clockEl.textContent=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+setInterval(updateClock,1000);updateClock();
+</script>
+</body>
+</html>
