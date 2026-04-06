@@ -76,16 +76,16 @@ setInterval(updateClock,1000);updateClock();
 </html>
 <!-- Easter egg: hidden reflex hammer celebration -->
 <style>
-#easter-hover-zone{position:fixed;bottom:22px;right:0;width:220px;height:30px;z-index:9990;cursor:default}
-#easter-label{position:fixed;bottom:26px;right:12px;font-size:11px;color:#999;opacity:0;transition:opacity 0.4s ease;pointer-events:auto;z-index:9991;font-family:Tahoma,sans-serif;white-space:nowrap}
-#easter-hover-zone:hover ~ #easter-label,
-#easter-hover-zone:hover + #easter-label{opacity:1}
+#easter-hover-zone{position:fixed;bottom:22px;right:0;width:220px;height:30px;z-index:9990;cursor:default;display:flex;align-items:center;justify-content:flex-end;padding-right:12px}
+#easter-label{font-size:11px;color:#999;opacity:0;transition:opacity 0.4s ease;pointer-events:none;font-family:Tahoma,sans-serif;white-space:nowrap}
+
+#easter-hover-zone:hover #easter-label{opacity:1}
 #easter-hover-zone:hover{cursor:default}
 .easter-hover-active #easter-label{opacity:1}
 #easter-msg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:bold;color:#fff;text-shadow:0 2px 8px #000,0 0 20px #000;z-index:10010;opacity:0;pointer-events:none;text-align:center;transition:opacity 0.5s ease}
 </style>
-<div id="easter-hover-zone" onmouseenter="document.getElementById('easter-label').style.opacity='1'" onmouseleave="document.getElementById('easter-label').style.opacity='0'"></div>
-<div id="easter-label" onclick="triggerHammers()">Brought to you by the Neurology Class of 2029</div>
+
+<div id="easter-hover-zone" onclick="triggerHammers()" style="cursor:default"><div id="easter-label">Brought to you by the Neurology Class of 2029</div></div>
 <div id="easter-msg">Nice catch, future neurologist! 🧠</div>
 <script>
 (function(){
