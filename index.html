@@ -74,3 +74,65 @@ setInterval(updateClock,1000);updateClock();
 </script>
 </body>
 </html>
+<!-- Easter egg: hidden reflex hammer celebration -->
+<style>
+#easter-hover-zone{position:fixed;bottom:0;right:0;width:220px;height:40px;z-index:9990;cursor:default}
+#easter-label{position:fixed;bottom:8px;right:12px;font-size:11px;color:#999;opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:9991;font-family:Tahoma,sans-serif;white-space:nowrap}
+#easter-hover-zone:hover ~ #easter-label,
+#easter-hover-zone:hover + #easter-label{opacity:1}
+#easter-hover-zone:hover{cursor:default}
+.easter-hover-active #easter-label{opacity:1}
+#easter-msg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:bold;color:#fff;text-shadow:0 2px 8px #000,0 0 20px #000;z-index:10010;opacity:0;pointer-events:none;text-align:center;transition:opacity 0.5s ease}
+</style>
+<div id="easter-hover-zone" onmouseenter="document.getElementById('easter-label').style.opacity='1'" onmouseleave="document.getElementById('easter-label').style.opacity='0'"></div>
+<div id="easter-label" onclick="triggerHammers()">Brought to you by the Neurology Class of 2029</div>
+<div id="easter-msg">Nice catch, future neurologist! 🧠</div>
+<script>
+(function(){
+  var images=['hammer.png','Image 1.png','Image 2.png','hammer_big.png'];
+  function triggerHammers(){
+    for(var i=0;i<25;i++){spawnHammer(i)}
+    setTimeout(function(){
+      var msg=document.getElementById('easter-msg');
+      msg.style.opacity='1';
+      setTimeout(function(){msg.style.opacity='0'},3000);
+    },4200);
+  }
+  window.triggerHammers=triggerHammers;
+  function spawnHammer(idx){
+    var el=document.createElement('img');
+    var src=images[Math.floor(Math.random()*images.length)];
+    el.src=src;
+    var size=60+Math.floor(Math.random()*61);
+    el.style.cssText='position:fixed;width:'+size+'px;height:auto;z-index:10000;pointer-events:none;';
+    var W=window.innerWidth,H=window.innerHeight;
+    var edge=Math.floor(Math.random()*4);
+    var startX,startY,endX,endY;
+    if(edge===0){startX=Math.random()*W;startY=-size;endX=Math.random()*W;endY=H+size;}
+    else if(edge===1){startX=Math.random()*W;startY=H+size;endX=Math.random()*W;endY=-size;}
+    else if(edge===2){startX=-size;startY=Math.random()*H;endX=W+size;endY=Math.random()*H;}
+    else{startX=W+size;startY=Math.random()*H;endX=-size;endY=Math.random()*H;}
+    el.style.left=startX+'px';
+    el.style.top=startY+'px';
+    document.body.appendChild(el);
+    var duration=1500+Math.random()*2000;
+    var spinSpeed=200+Math.random()*600;
+    var start=null;
+    function animate(ts){
+      if(!start)start=ts;
+      var p=Math.min((ts-start)/duration,1);
+      var x=startX+(endX-startX)*p;
+      var y=startY+(endY-startY)*p;
+      var deg=(ts/spinSpeed*360)%360;
+      var opacity=p>0.75?1-(p-0.75)/0.25:1;
+      el.style.left=x+'px';
+      el.style.top=y+'px';
+      el.style.transform='rotate('+deg+'deg)';
+      el.style.opacity=opacity;
+      if(p<1){requestAnimationFrame(animate);}
+      else{el.remove();}
+    }
+    setTimeout(function(){requestAnimationFrame(animate);},idx*30);
+  }
+})();
+</script>
